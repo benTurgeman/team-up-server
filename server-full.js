@@ -62,12 +62,14 @@ function dbConnect() {
 function getGamesParams(params) {
 	var query = {};
 	if (params.categoryId) {
-		query.categoryId = params.categoryId;
+		query = {'category:categoryId': params.categoryId}
 	}if(params.PlayerId){
-		query = {players:{$elemMatch:{id : params.PlayerId} }}
+		query = {players:{$elemMatch:{id : params.PlayerId}}}
 	}
 	return query;
 }
+
+
 // GETs a list
 app.get('/data/:objType', function (req, res) {
 
