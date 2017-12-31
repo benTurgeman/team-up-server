@@ -63,9 +63,9 @@ function getGamesParams(params) {
 	var query = {};
 	if (params.categoryId) {
 		query.categoryId = params.categoryId;
+	}if(params.PlayerId){
+		query = {players:{$elemMatch:{id : params.PlayerId} }}
 	}
-
-
 	return query;
 }
 // GETs a list
@@ -77,7 +77,7 @@ app.get('/data/:objType', function (req, res) {
 		query = getGamesParams(req.query)
 	}
 
-	
+	cl('query: ' , query)
 	dbConnect().then(db => {
 		const collection = db.collection(objType);
 
@@ -211,7 +211,7 @@ app.post('/login', function (req, res) {
 			console.log('password: ' , req.body.password)
 			if (user) {
 				cl('Login Succesful');
-				delete user.password;
+				// delete user.password;
 				req.session.user = user;  
 				res.json({ token: 'Beareloginr: puk115th@b@5t', user });
 			} else {
