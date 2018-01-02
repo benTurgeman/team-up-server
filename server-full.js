@@ -44,7 +44,7 @@ function dbConnect() {
 
 	return new Promise((resolve, reject) => {
 		// Connection URL
-		var url = 'mongodb://localhost:27017/teamup';
+		var url = 'mongodb://teamup:gameon@ds239137.mlab.com:39137/team-up';
 		// Use connect method to connect to the Server
 		mongodb.MongoClient.connect(url, function (err, db) {
 			if (err) {
@@ -174,7 +174,12 @@ app.post('/data/:objType', upload.single('file'), function (req, res) {
 				res.json(500, { error: 'Failed to add' })
 			} else {
 				cl(objType + " added");
-				res.json(obj);
+				
+				if(objType === 'game'){
+					io.emit('gameCreated', obj)
+				}else{
+					res.json(obj);
+				}
 			}
 			db.close();
 		});
@@ -198,7 +203,11 @@ app.put('/data/:objType/:id', function (req, res) {
 					cl('Cannot Update', err)
 					res.json(500, { error: 'Update failed' })
 				} else {
-					res.json(newObj);
+					if(objType === 'game'){
+						io.emit('gameUpdated', newObj)
+					}else{
+						res.json(newObj);
+					}
 				}
 				db.close();
 			});
@@ -263,9 +272,9 @@ io.on('connection', function (socket) {
 	socket.on('disconnect', function () {
 		console.log('user disconnected');
 	});
-	socket.on('chat msg', function (msg) {
+	socket.on('user connected', function (msg) {
 		// console.log('message: ' + msg);
-		io.emit('chat newMsg', msg);
+		// io.emit('chat newMsg', msg);
 	});
 });
 
