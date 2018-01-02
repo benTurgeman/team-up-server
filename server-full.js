@@ -62,7 +62,7 @@ function dbConnect() {
 function getGamesParams(params) {
 	var query = {};
 	if (params.categoryId) {
-		query = {'category:categoryId': params.categoryId}
+		query = {'category._id': params.categoryId}
 	}if(params.PlayerId){
 		query = {players:{$elemMatch:{id : params.PlayerId}}}
 	}
