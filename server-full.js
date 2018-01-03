@@ -177,6 +177,7 @@ app.post('/data/:objType', upload.single('file'), function (req, res) {
 				
 				if(objType === 'game'){
 					io.emit('gameCreated', obj)
+					res.json(obj);
 				}else{
 					res.json(obj);
 				}
@@ -205,6 +206,7 @@ app.put('/data/:objType/:id', function (req, res) {
 				} else {
 					if(objType === 'game'){
 						io.emit('gameUpdated', newObj)
+						res.end()
 					}else{
 						res.json(newObj);
 					}
